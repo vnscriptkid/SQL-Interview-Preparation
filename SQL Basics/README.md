@@ -40,3 +40,52 @@
   DELETE FROM phones 
   WHERE manufacturer = 'Samsung';
   ```
+  
+## 4. SELECT DISTINCT
+:question: Print the number of unique phone manufacturers
+
+:100::smiley::100:
+```sql
+SELECT COUNT(DISTINCT manufacturer) FROM phones;
+```
+
+## 5. Utilities
+:one: GREATEST
+
+:question: 💸 Opening price of taxi is 1$. 2$ is charged for every km. Calculate final price for all drives. 
+```sql
+    SELECT
+        id,
+        distance,
+        GREATEST(1, 2 * distance) AS final_price
+    FROM drives;
+```
+
+:two: LEAST
+
+:question: 💰 :money_mouth_face: All products are on sale!. Price is the least of the products price * 0.5 or $400
+```sql
+SELECT 
+    name, 
+    price, 
+    LEAST(price * 0.5, 400) AS after_sale_price
+FROM products; 
+```
+
+:three: CASE
+
+:question: Print name of each product and its price. Also print a description of the price.
+If __price > 600__ then __'high'__.
+If __price > 300__ then __'medium'__.
+Else print __'cheap'__
+```sql
+    SELECT 
+        name, 
+        price,
+        CASE
+            WHEN price > 600 THEN 'high'
+            WHEN price > 300 THEN 'medium'
+            ELSE 'cheap'
+        END
+    FROM products;
+```
