@@ -70,6 +70,9 @@ https://www.youtube.com/watch?v=aZjYr87r1b8
 + Bottom-up
 
 ## 7. Insertion and Deletion B tree? (continued)
+#### :muscle: Visualizations 
+
+https://www.cs.usfca.edu/~galles/visualization/BTree.html
 
 ## 8. B+  tree? 
 - For B tree, each node holds a pointer to actual record
