@@ -60,4 +60,71 @@ LIMIT 30;
 
 ## :star: Views
 
+- What?
+	- Produce a virtual table on the fly (in the RAM !?!) at the time referencing table
+	- vs CTE ? 
+		- View can be defined once and refer anywhere
+		- CTE is like naming a piece of query and refer it in the same context
+
+- Example
+```sql
+-- define a new view
+CREATE VIEW tags AS (
+	SELECT id, created_at, post_id, user_id, 'caption' AS type FROM caption_tags
+	UNION ALL
+	SELECT id, created_at, post_id, user_id, 'photo' AS type FROM photo_tags
+);
+
+-- some other context: find top 10 tagged users
+SELECT username, COUNT(*) FROM tags
+JOIN users ON users.id = tags.user_id
+GROUP BY username
+ORDER BY count DESC
+LIMIT 10;
+
+-- delete the view
+DROP VIEW tags;
+
+-- update existing view
+CREATE OR REPLACE VIEW recent_posts AS (
+	SELECT * FROM posts
+	ORDER BY created_at DESC
+	LIMIT 10
+)
+
+-- change definition later
+CREATE OR REPLACE VIEW recent_posts AS (
+	SELECT * FROM posts
+	ORDER BY created_at DESC
+	LIMIT 15
+)
+```
+
 ## :star: Materialized views
+- What ?
+	-  Materialized view = view + cache
+	-  Cache data from the last refresh (or when it was first ran) and return it when view is referred next time
+- When ?
+	- Long running query
+	- Data from query does not change often
+
+```sql
+-- create new materialized view
+CREATE MATERIALIZED VIEW weekly_likes AS (
+	SELECT
+		date_trunc('week', COALESCE(posts.created_at, comments.created_at)) AS week,
+		COUNT(posts.id) AS num_likes_for_posts,
+		COUNT(comments.id) AS num_likes_for_comments
+	FROM likes
+	LEFT JOIN posts ON likes.post_id = posts.id
+	LEFT JOIN comments ON likes.comment_id = comments.id
+	GROUP BY week
+	ORDER BY week
+) WITH DATA;
+
+-- get brand new data and cache it
+REFRESH MATERIALIZED VIEW weekly_likes;
+
+-- take data from the cache
+SELECT * FROM weekly_likes;
+```
