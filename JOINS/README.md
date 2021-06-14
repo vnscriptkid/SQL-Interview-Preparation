@@ -13,3 +13,14 @@
 ## 3-way JOIN
 - :rocket: Who is commenting own their own photos?
 ![image](https://user-images.githubusercontent.com/28957748/120635261-76129580-c496-11eb-84dc-9fda71bca97a.png)
+
+## Visualize `LEFT JOIN`
+
+![image](https://user-images.githubusercontent.com/28957748/121924018-b6f78d80-cd65-11eb-88ee-e95308ed3105.png)
+
+```sql
+SELECT *
+FROM likes
+LEFT JOIN posts ON likes.post_id = posts.id
+LEFT JOIN comments ON likes.comment_id = comments.id;
+```
