@@ -1,8 +1,11 @@
 ## Dependencies
 - `package.json`
 ```json
+"dependencies": {
+  "express": "^4.17.1",
   "node-pg-migrate": "^5.9.0",
   "pg": "^8.6.0"
+}
 ```
 
 ## Workflow
