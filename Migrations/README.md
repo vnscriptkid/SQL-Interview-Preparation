@@ -63,4 +63,70 @@ await pool.query("INSERT INTO posts (lat, lng, loc) VALUES ($1, $2, $3)", [
 ]);
 ```
 
+#### :three: Copy lat/lng to loc
+`migrations/data/01-lng-lat-to-loc.js`
+```javascript
+const pg = require("pg");
 
+const pool = new pg.Pool({
+  host: "localhost",
+  port: 5432,
+  database: "socialnetwork",
+  user: "postgres",
+  password: "123456",
+});
+
+pool
+  .query(
+    `
+    UPDATE posts
+    SET loc = POINT(lng, lat)
+    WHERE loc IS NULL;
+`
+  )
+  .then(() => console.log("Data migration completed."))
+  .catch((err) => console.error(err.message))
+  .finally(() => pool.end());
+```
+
+```console
+foo@bar:~# node migrations/data/01-lng-lat-to-loc.js
+```
+
+#### :four: Update code to only write to loc column
+
+```javascript
+await pool.query("INSERT INTO posts (loc) VALUES ($1)", [
+  `(${lng}, ${lat})`,
+]);
+```
+
+#### :five: Drop columns lat/lng
+```console
+bar@foo:~$ npm run migrate create drop lat and lng from posts
+```
+
+`1622004951161_drop-lat-and-lng-from-posts.js`
+```javascript
+exports.shorthands = undefined;
+
+exports.up = (pgm) => {
+  pgm.sql(`
+        ALTER TABLE posts
+        DROP COLUMN lat,
+        DROP COLUMN lng;
+    `);
+};
+
+exports.down = (pgm) => {
+  pgm.sql(`
+        ALTER TABLE posts
+        ADD COLUMN lat NUMERIC,
+        ADD COLUMN lng NUMERIC;
+    `);
+};
+```
+
+```console
+bar@foo:~$ set DATABASE_URL=postgres://postgres:123456@localhost:5432/socialnetwork&&npm run migrate up
+```
