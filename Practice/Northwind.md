@@ -260,3 +260,24 @@ SELECT
 FROM customer_next_order
 WHERE (next_order_date - order_date) <= 4;
 ```
+
+#### ❓ 17. First order from each country
+```sql
+WITH orders_by_country AS (
+	SELECT
+		order_id,
+		ship_country,
+		order_date,
+		ROW_NUMBER () OVER (
+			PARTITION BY  ship_country
+			ORDER BY order_date
+		) AS date_sequence
+	FROM orders
+)
+SELECT
+	order_id,
+	ship_country,
+	order_date
+FROM orders_by_country
+WHERE date_sequence = 1;
+```
