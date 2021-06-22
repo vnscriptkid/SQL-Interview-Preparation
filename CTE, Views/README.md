@@ -128,26 +128,3 @@ REFRESH MATERIALIZED VIEW weekly_likes;
 -- take data from the cache
 SELECT * FROM weekly_likes;
 ```
-
-## :star: LEAD() function
-- What ❓ Provide access to the next row
-- When ❓ Compare value of current row with next row
-- How 🔯 
-	- Example: Compare the sales of the current year with sales of the next year for each product group
-	- ![image](https://user-images.githubusercontent.com/28957748/122888781-5cb18a80-d36c-11eb-9ebe-b1b07a818ba4.png)
-	```sql
-	SELECT
-		year, 
-		amount,
-		group_id,
-		LEAD(amount,1) OVER (
-			PARTITION BY group_id
-			ORDER BY year
-		) next_year_sales
-	FROM
-		sales;
-	```
-	- Explainations:
-		- The `PARTITION BY` clause distributes rows into product groups (or partitions) specified by group id
-		- The `ORDER BY` clause sorts rows in each product group by years in ascending order.
-		- The `LEAD()` function returns the sales of the next year from the current year for each product group.
