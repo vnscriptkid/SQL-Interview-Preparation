@@ -21,7 +21,7 @@ WHERE
 GROUP BY ship_country;
 ```
 
-#### ❓ :three: Orders shipping to any country within latin america
+#### ❓ :three: Orders shipping to any country within latin america including 'Argentina', 'Mexico', 'Brazil', 'Venezuela'
 ```sql
 SELECT *
 FROM orders
@@ -30,7 +30,7 @@ WHERE
 ORDER BY ship_country;
 ```
 
-#### ❓ :four: Show total price for each order line
+#### ❓ :four: Show total price for each order line: unit_price * quantity - discount
 ```sql
 SELECT 
 	order_id, 
@@ -63,7 +63,7 @@ GROUP BY 1
 ORDER BY 2 DESC;
 ```
 
-#### ❓ :seven: List products that need re-ordering
+#### ❓ :seven: List products that need re-ordering (when units_in_stock <= reorder_level)
 ```sql
 SELECT 
 	product_name,
@@ -78,7 +78,7 @@ ORDER BY product_name5;
 
 #### ❓ :eight: Freight analysis
 ```sql
--- List top 5 highest freight charges by country
+-- List top 5 highest average freight charges by country
 SELECT 
 	ship_country,
 	AVG(freight)
@@ -88,7 +88,7 @@ GROUP BY ship_country
 ORDER BY 2 DESC
 LIMIT 5;
 
--- List top 5 highest freight charges by country in year 1997
+-- List top 5 highest average freight charges by country in year 1997
 SELECT 
 	ship_country,
 	AVG(freight)
@@ -99,7 +99,7 @@ GROUP BY ship_country
 ORDER BY 2 DESC
 LIMIT 5;
 
--- List top 5 highest freight charges by country in the latest year
+-- List top 5 highest average freight charges by country in the latest year
 SELECT 
 	ship_country,
 	AVG(freight)
@@ -120,7 +120,7 @@ LEFT JOIN orders o ON c.customer_id = o.customer_id
 WHERE o.customer_id IS NULL;
 ```
 
-#### ❓ 🔟 Top customers with their total order amount spent
+#### ❓ 🔟 Top customers with highest total order amount spent
 ```sql
 SELECT
 	c.customer_id,
@@ -242,7 +242,7 @@ FROM customer_countries c
 FULL JOIN supplier_countries s ON c.country = s.country;
 ```
 
-#### ❓ 16. Customers with multiple orders
+#### ❓ 16. Customers with multiple orders within 4 days
 ```sql
 WITH customer_next_order AS (
 	SELECT
