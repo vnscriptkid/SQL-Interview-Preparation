@@ -180,3 +180,37 @@ UPDATE employees
 SET phone_number = REPLACE(phone_number, '123', '888')
 WHERE phone_number LIKE '%123%';
 ```
+
+#### 19. Get monthly salary of each employee
+```sql
+SELECT
+	employee_id,
+	ROUND(salary / 12, 2)
+FROM
+	employees
+ORDER BY 2 DESC;
+```
+
+#### 20. Find average salary and number of employees
+```sql
+SELECT
+	COUNT(*) AS "Number of employees",
+	ROUND(AVG(salary), 2) AS "Average salary"
+FROM employees;
+```
+
+#### 21. Display last name of employees whose last name contains exactly 6 characters
+```sql
+-- One way
+SELECT
+	last_name,
+	LENGTH(last_name)
+FROM employees
+WHERE LENGTH(last_name) = 6
+
+-- The other
+SELECT
+	last_name
+FROM employees
+WHERE last_name LIKE '______';
+```
