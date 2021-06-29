@@ -127,3 +127,100 @@ WHERE o.shipped_date > o.required_date
 GROUP BY 1, 2
 ORDER BY 3 DESC;
 ```
+
+## 43. Late orders vs. total orders
+```sql
+WITH late_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	WHERE o.shipped_date > o.required_date
+	GROUP BY o.employee_id
+),
+total_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	GROUP BY o.employee_id
+)
+SELECT 
+	e.employee_id,
+	e.last_name,
+	t.count AS "AllOrders",
+	l.count AS "LateOrders"
+FROM late_orders l
+JOIN total_orders t ON t.employee_id = l.employee_id
+JOIN employees e ON e.employee_id = l.employee_id;
+```
+
+## 44. Late orders vs. total orders - missing employee
+
+## 45. Late orders vs. total orders - fix null
+
+## 46. Late orders vs. total orders - percentage
+```sql
+WITH late_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	WHERE o.shipped_date > o.required_date
+	GROUP BY o.employee_id
+),
+total_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	GROUP BY o.employee_id
+)
+SELECT 
+	e.employee_id,
+	e.last_name,
+	t.count AS "AllOrders",
+	l.count AS "LateOrders",
+	(l.count::float / t.count) AS "PercentLateOrders"
+FROM late_orders l
+JOIN total_orders t ON t.employee_id = l.employee_id
+JOIN employees e ON e.employee_id = l.employee_id;
+```
+
+## 47. Late orders vs. total orders - fix decimal
+```sql
+WITH late_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	WHERE o.shipped_date > o.required_date
+	GROUP BY o.employee_id
+),
+total_orders AS (
+	SELECT
+		o.employee_id,
+		COUNT(*)
+	FROM orders o
+	JOIN employees e ON e.employee_id = o.employee_id
+	GROUP BY o.employee_id
+)
+SELECT 
+	e.employee_id,
+	e.last_name,
+	t.count AS "AllOrders",
+	l.count AS "LateOrders",
+	ROUND(l.count::numeric / t.count, 2) AS "PercentLateOrders"
+FROM late_orders l
+JOIN total_orders t ON t.employee_id = l.employee_id
+JOIN employees e ON e.employee_id = l.employee_id;
+```
+
+## 48. Customer grouping
+
+
