@@ -9,6 +9,14 @@ select
 from rental;
 ```
 
+```sql
+select
+	count(*) filter (where return_date - rental_date < interval '3 days') as "lt 3 days",
+	count(*) filter (where return_date - rental_date >= interval '3 days') as "gt 3 days",
+	count(*) filter (where return_date is null) as "never returned"
+from rental;
+```
+
 ### ⚠️ 4.10 Write a query to give counts of the films by their length in groups of 0 - 1hrs, 1 - 2hrs, 2 - 3hrs, and 3hrs+ 
 ### (note: you might get slightly different numbers if doing inclusive or exclusive grouping - but don’t sweat it!)
 
@@ -24,12 +32,4 @@ select
 from film
 group by 1
 order by 1;
-```
-
-```sql
-select
-	count(*) filter (where return_date - rental_date < interval '3 days') as "lt 3 days",
-	count(*) filter (where return_date - rental_date >= interval '3 days') as "gt 3 days",
-	count(*) filter (where return_date is null) as "never returned"
-from rental;
 ```
