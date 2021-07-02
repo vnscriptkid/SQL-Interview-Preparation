@@ -20,13 +20,16 @@ select
 		when length >= 120 and length < 180 then '2-3hrs'
 		else '3hrs+'
 	end as len,
-	count(1) as count
+	count(*) as count
 from film
-group by case
-		when length >=0 and length < 60 then '0-1hrs'
-		when length >= 60 and length < 120 then '1-2hrs'
-		when length >= 120 and length < 180 then '2-3hrs'
-		else '3hrs+'
-	end
+group by 1
 order by 1;
+```
+
+```sql
+select
+	count(*) filter (where return_date - rental_date < interval '3 days') as "lt 3 days",
+	count(*) filter (where return_date - rental_date >= interval '3 days') as "gt 3 days",
+	count(*) filter (where return_date is null) as "never returned"
+from rental;
 ```
