@@ -20,9 +20,9 @@
     - Why we need it (instead of just using raw INTEGER field `boat_id`)?
         - Raw fields work just fine in case of retrieving data
         - Foreign :old_key: provides data __consistency__ through constraints around deletion (RAN CD 😆)
-            - ON DELETE RESTRICTION
+            - ON DELETE RESTRICTION: Prevent deleting post that is associated with comments
             - ON DELETE NO ACTION
-            - ON DELETE CASCADE
+            - ON DELETE CASCADE: Deleting post will cause all associated comments get deleted
             - ON DELETE SET NULL
             - ON DELETE SET DEFAULT
 ## 3. Four kinds of relationships
